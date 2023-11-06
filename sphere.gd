@@ -65,6 +65,10 @@ func _input(event):
 		self.global_translate(v3)
 		# TODO : clamp pos
 		add_displacement(cur_pos - position)
+	
+	if event.is_action_pressed("reset"):
+		position = Vector3.ZERO
+		rotation = Vector3.ZERO
 
 func update_shader(delta):
 	var full_disp = (disp - Vector3.UP).normalized()
