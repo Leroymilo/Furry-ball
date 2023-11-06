@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://c74iukkj7fow3"]
+
+[ext_resource type="Shader" path="res://sphere.gdshader" id="1_d3t7a"]
+[ext_resource type="Script" path="res://sphere.gd" id="1_lwtch"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_a6fmu"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tp1y2"]
+lightmap_size_hint = Vector2i(33, 17)
+radius = 1.0
+height = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4o2c4"]
+render_priority = 0
+shader = ExtResource("1_d3t7a")
+shader_parameter/H = null
+
+[node name="Node3D" type="StaticBody3D"]
+script = ExtResource("1_lwtch")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_a6fmu")
+
+[node name="test_shell" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_tp1y2")
+surface_material_override/0 = SubResource("ShaderMaterial_4o2c4")

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdfujebesprfe"]
+
+[ext_resource type="Script" path="res://zoom.gd" id="1_kah6v"]
+[ext_resource type="PackedScene" uid="uid://c74iukkj7fow3" path="res://sphere.tscn" id="1_vcban"]
+[ext_resource type="PackedScene" uid="uid://ch47fjs5gsa7n" path="res://skybox.tscn" id="2_ljohk"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_kah6v")
+
+[node name="Sphere" parent="." instance=ExtResource("1_vcban")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.458116, 0.45803, -0.7618, 0.000917293, 0.856777, 0.515686, 0.888892, -0.236943, 0.392083, -2, 1.5, 1)
+
+[node name="Skybox" parent="." instance=ExtResource("2_ljohk")]
+
+[node name="CameraNode" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraNode"]
+fov = 30.0
