@@ -1,12 +1,20 @@
 shader_type spatial;
 
-uniform float H;
-uniform vec3 displacement;
-uniform float rot_intensity;
-uniform float DENSITY = 512.f;
-uniform vec3 base_color = vec3(0.83, 0.65, 0.31);
+// Aesthetics parameters
+uniform float L = 0.4;								// strand length
+uniform float DENSITY = 512.f;						// hair density
+uniform vec3 base_color = vec3(0.83, 0.65, 0.31);	// base color
 
-float hash(uint n) {
+// Required parameters
+uniform float H;
+// shell layer
+uniform mat4 del_transf;
+// movement transform (with inverse exponential persistence)
+
+float hash(vec2 v) {
+	vec2 iUV = floor(v * DENSITY);
+	uint n = uint(iUV.x + DENSITY * iUV.y);
+	
 	// integer hash copied from Hugo Elias
 	n = (n << 13U) ^ n;
 	n = n * (n * n * 15731U + 789221U) + 1376312589U;
@@ -14,25 +22,25 @@ float hash(uint n) {
 }
 
 void vertex() {
-	// Rotational displacement :
-	float loc_rot_int = length(VERTEX.xz) * rot_intensity;
-	vec3 rot_dir = cross(NORMAL, vec3(0, 1.f, 0));
+	// Applying fake physics
+	vec3 tip = VERTEX + L * NORMAL;
+	vec3 displacement = (del_transf * vec4(tip, 1)).xyz - tip;
+	vec3 delta = normalize(NORMAL + H * displacement);
 	
-	vec3 deltaV = NORMAL + H * (displacement + rot_dir * loc_rot_int);
-	VERTEX += 0.2 * H * normalize(deltaV);
+	// Avoiding clipping at high rotation speed (doesn't work as expected)
+	float proj = dot(delta, NORMAL);
+	delta = delta + NORMAL * (1.f - proj);
+	
+	VERTEX += L * sqrt(H) * normalize(delta);
+	
+	// To enforce circular strands on the equator (instead of ellipsises)
 	UV = vec2(2.f, 1.f) * UV;
 }
 
 void fragment() {
-	vec2 iUV = floor(UV * DENSITY);
-	
 	vec2 loc_space = fract(UV * DENSITY) * 2.f - 1.f;
-	
-	ALBEDO = vec3(loc_space, 0);
-	
-	uint seed = uint(iUV.x + DENSITY * iUV.y);
 
-	float rand = hash(seed);
+	float rand = hash(UV);
 	float p = (1.f - H / rand);
 
 	if (length(loc_space) < 2.f * p ) {

@@ -13,7 +13,11 @@ height = 2.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4o2c4"]
 render_priority = 0
 shader = ExtResource("1_d3t7a")
+shader_parameter/L = 0.4
+shader_parameter/DENSITY = 512.0
+shader_parameter/base_color = Vector3(0.83, 0.65, 0.31)
 shader_parameter/H = null
+shader_parameter/del_transf = null
 
 [node name="Node3D" type="StaticBody3D"]
 script = ExtResource("1_lwtch")

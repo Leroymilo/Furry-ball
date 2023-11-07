@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://cdfujebesprfe"]
 
-[ext_resource type="Script" path="res://zoom.gd" id="1_kah6v"]
+[ext_resource type="Script" path="res://global.gd" id="1_jkigb"]
 [ext_resource type="PackedScene" uid="uid://c74iukkj7fow3" path="res://sphere.tscn" id="1_vcban"]
 [ext_resource type="PackedScene" uid="uid://ch47fjs5gsa7n" path="res://skybox.tscn" id="2_ljohk"]
 
 [node name="Node3D" type="Node3D"]
-script = ExtResource("1_kah6v")
+script = ExtResource("1_jkigb")
 
 [node name="Sphere" parent="." instance=ExtResource("1_vcban")]
 
@@ -18,3 +18,107 @@ transform = Transform3D(0.458116, 0.45803, -0.7618, 0.000917293, 0.856777, 0.515
 
 [node name="Camera3D" type="Camera3D" parent="CameraNode"]
 fov = 30.0
+
+[node name="HUD" type="Node2D" parent="."]
+
+[node name="CameraControlButton" type="Button" parent="HUD"]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+offset_right = 1152.0
+offset_bottom = 648.0
+focus_mode = 1
+action_mode = 0
+button_mask = 3
+
+[node name="StiffnessSlider" type="HSlider" parent="HUD"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 266.0
+offset_bottom = 26.0
+tooltip_text = "Strand Stiffness"
+max_value = 1.0
+step = 0.01
+tick_count = 5
+ticks_on_borders = true
+
+[node name="TimeSlider" type="HSlider" parent="HUD"]
+offset_left = 10.0
+offset_top = 36.0
+offset_right = 266.0
+offset_bottom = 52.0
+tooltip_text = "Time Speed (middle is normal)"
+min_value = 1.0
+value = 10.0
+exp_edit = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="ShellNbSlider" type="HSlider" parent="HUD"]
+offset_left = 10.0
+offset_top = 62.0
+offset_right = 266.0
+offset_bottom = 78.0
+tooltip_text = "Shell Number (WIP)"
+min_value = 4.0
+max_value = 512.0
+value = 64.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="DensitySlider" type="HSlider" parent="HUD"]
+offset_left = 10.0
+offset_top = 88.0
+offset_right = 266.0
+offset_bottom = 104.0
+tooltip_text = "Fur Density"
+min_value = 4.0
+max_value = 2048.0
+value = 512.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="LengthSlider" type="HSlider" parent="HUD"]
+offset_left = 10.0
+offset_top = 114.0
+offset_right = 266.0
+offset_bottom = 130.0
+tooltip_text = "Fur Length"
+min_value = 0.2
+max_value = 2.0
+step = 0.01
+value = 0.2
+tick_count = 5
+ticks_on_borders = true
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="HUD"]
+offset_left = 10.0
+offset_top = 140.0
+offset_right = 266.0
+offset_bottom = 156.0
+tooltip_text = "Base fur color"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+color = Color(0.94902, 0.788235, 0.541176, 1)
+edit_alpha = false
+
+[node name="Info" type="Label" parent="HUD"]
+offset_left = 9.0
+offset_top = 511.0
+offset_right = 265.0
+offset_bottom = 639.0
+vertical_alignment = 2
+
+[connection signal="focus_entered" from="HUD/CameraControlButton" to="Sphere" method="enable_camera_controls"]
+[connection signal="focus_entered" from="HUD/StiffnessSlider" to="Sphere" method="disable_camera_controls"]
+[connection signal="value_changed" from="HUD/StiffnessSlider" to="Sphere" method="_on_stiffness_changed"]
+[connection signal="focus_entered" from="HUD/TimeSlider" to="Sphere" method="disable_camera_controls"]
+[connection signal="value_changed" from="HUD/TimeSlider" to="Sphere" method="_on_time_changed"]
+[connection signal="focus_entered" from="HUD/ShellNbSlider" to="Sphere" method="disable_camera_controls"]
+[connection signal="value_changed" from="HUD/ShellNbSlider" to="Sphere" method="_on_shell_nb_changed"]
+[connection signal="focus_entered" from="HUD/DensitySlider" to="Sphere" method="disable_camera_controls"]
+[connection signal="value_changed" from="HUD/DensitySlider" to="Sphere" method="_on_density_changed"]
+[connection signal="focus_entered" from="HUD/LengthSlider" to="Sphere" method="disable_camera_controls"]
+[connection signal="value_changed" from="HUD/LengthSlider" to="Sphere" method="_on_length_changed"]
+[connection signal="color_changed" from="HUD/ColorPickerButton" to="Sphere" method="_on_color_changed"]
+[connection signal="focus_entered" from="HUD/ColorPickerButton" to="Sphere" method="disable_camera_controls"]
