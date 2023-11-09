@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c74iukkj7fow3"]
+[gd_scene load_steps=7 format=3 uid="uid://c74iukkj7fow3"]
 
 [ext_resource type="Shader" path="res://sphere.gdshader" id="1_d3t7a"]
 [ext_resource type="Script" path="res://sphere.gd" id="1_lwtch"]
@@ -10,13 +10,23 @@ lightmap_size_hint = Vector2i(33, 17)
 radius = 1.0
 height = 2.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4o2c4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mubju"]
 render_priority = 0
 shader = ExtResource("1_d3t7a")
 shader_parameter/L = 0.4
 shader_parameter/DENSITY = 512.0
 shader_parameter/base_color = Vector3(0.83, 0.65, 0.31)
-shader_parameter/H = null
+shader_parameter/H = 0.5
+shader_parameter/del_transf = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4o2c4"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_mubju")
+shader = ExtResource("1_d3t7a")
+shader_parameter/L = 0.4
+shader_parameter/DENSITY = 512.0
+shader_parameter/base_color = Vector3(0.83, 0.65, 0.31)
+shader_parameter/H = 0.25
 shader_parameter/del_transf = null
 
 [node name="Node3D" type="StaticBody3D"]
@@ -26,6 +36,7 @@ script = ExtResource("1_lwtch")
 shape = SubResource("SphereShape3D_a6fmu")
 
 [node name="test_shell" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0934872, -0.295901, 0.389686)
 visible = false
 mesh = SubResource("SphereMesh_tp1y2")
 surface_material_override/0 = SubResource("ShaderMaterial_4o2c4")

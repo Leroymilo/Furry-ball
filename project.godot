@@ -10,10 +10,15 @@ config_version=5
 
 [application]
 
-config/name="Shader Test"
+config/name="Furry ball"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_height"
 
 [filesystem]
 

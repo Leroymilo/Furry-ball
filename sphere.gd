@@ -40,8 +40,7 @@ func add_shell():
 	SHELL_NB += 1
 
 func remove_shell():
-	var shell: MeshInstance3D = shells.pop_back()
-	remove_child(get_node(shell.get_path()))
+	shells.pop_back().queue_free()
 	SHELL_NB -= 1
 
 func update_shell_H():
