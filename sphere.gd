@@ -3,6 +3,13 @@ extends StaticBody3D
 # Preloads
 var shader = preload("res://sphere.gdshader")
 var mesh: SphereMesh
+@onready var multimesh: MultiMesh = $MultiMeshInstance3D.multimesh
+var identity: Array[float] = [
+	1.0, 0.0, 0.0, 0.0,
+	0.0, 1.0, 0.0, 0.0,
+	0.0, 0.0, 1.0, 0.0
+]
+var buffer_array: Array[float] = []
 
 # Parameters
 var SHELL_NB: int = 0
@@ -24,38 +31,6 @@ var moving = false
 var prev_transf = Transform3D()
 var del_transf = Transform3D()
 
-func add_shell():
-	var i = shells.size()
-	var shell = MeshInstance3D.new()
-	shell.name = "shell" + str(i)
-	shell.sorting_offset = i
-	shell.mesh = mesh
-	
-	var material = ShaderMaterial.new()
-	material.shader = shader
-	shell.set_surface_override_material(0, material)
-	
-	shells.append(shell)
-	self.add_child(shell)
-	SHELL_NB += 1
-
-func remove_shell():
-	shells.pop_back().queue_free()
-	SHELL_NB -= 1
-
-func update_shell_H():
-	for i in range(SHELL_NB):
-		var material: ShaderMaterial = shells[i].get_surface_override_material(0)
-		material.set_shader_parameter("H", float(i) / SHELL_NB)
-	return
-
-# Setups the shells for the first time, to call after setting parameters
-func _ready():
-	mesh = SphereMesh.new()
-	mesh.radius = 1
-	mesh.height = 2
-	
-	prev_transf = Transform3D(transform)
 
 func _physics_process(delta):
 	del_transf = del_transf.interpolate_with(Transform3D(), 1 - exp(-K*delta))
@@ -95,28 +70,35 @@ func update_shader():
 	# stiffness
 	var final_transf = del_transf.translated_local(grav)
 	final_transf = final_transf.interpolate_with(Transform3D(), STIFF)
-	
-	for shell in shells:
-		var material: ShaderMaterial = shell.get_surface_override_material(0)
-		material.set_shader_parameter("L", L)
-		material.set_shader_parameter("DENSITY", DENSITY)
-		material.set_shader_parameter("base_color", base_color)
-		material.set_shader_parameter("del_transf", final_transf)
+
+	var material: ShaderMaterial = $MultiMeshInstance3D.get_material_override()
+	material.set_shader_parameter("SHELL_NB", SHELL_NB)
+	material.set_shader_parameter("L", L)
+	material.set_shader_parameter("DENSITY", DENSITY)
+	material.set_shader_parameter("base_color", base_color)
+	material.set_shader_parameter("del_transf", final_transf)
 
 
 func _on_stiffness_changed(value):
 	STIFF = value
 
 func _on_shell_nb_changed(value):
-	if value == SHELL_NB: return
+
+	multimesh.set_instance_count(value)
+
+	var buffer_array: Array[float] = []
 	
-	while len(shells) < value:
-		add_shell()
+	while len(buffer_array) < 12 * value:
+		buffer_array += identity
 	
-	while len(shells) > value:
-		remove_shell()
+	if len(buffer_array) > 12 * value:
+		buffer_array = buffer_array.slice(0, 12 * value)
+	multimesh.buffer = PackedFloat32Array(buffer_array)
 	
-	update_shell_H()
+#	for i in range(value):
+#		multimesh.set_instance_transform(i, Transform3D())
+
+	SHELL_NB = value
 
 func _on_time_changed(value):
 	K = value

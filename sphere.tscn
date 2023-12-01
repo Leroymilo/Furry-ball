@@ -5,29 +5,22 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_a6fmu"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yh5bt"]
+render_priority = 0
+shader = ExtResource("1_d3t7a")
+shader_parameter/L = 0.4
+shader_parameter/DENSITY = 512.0
+shader_parameter/base_color = Vector3(0.83, 0.65, 0.31)
+shader_parameter/SHELL_NB = 1
+shader_parameter/del_transf = null
+
 [sub_resource type="SphereMesh" id="SphereMesh_tp1y2"]
-lightmap_size_hint = Vector2i(33, 17)
 radius = 1.0
 height = 2.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mubju"]
-render_priority = 0
-shader = ExtResource("1_d3t7a")
-shader_parameter/L = 0.4
-shader_parameter/DENSITY = 512.0
-shader_parameter/base_color = Vector3(0.83, 0.65, 0.31)
-shader_parameter/H = 0.5
-shader_parameter/del_transf = null
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4o2c4"]
-render_priority = 0
-next_pass = SubResource("ShaderMaterial_mubju")
-shader = ExtResource("1_d3t7a")
-shader_parameter/L = 0.4
-shader_parameter/DENSITY = 512.0
-shader_parameter/base_color = Vector3(0.83, 0.65, 0.31)
-shader_parameter/H = 0.25
-shader_parameter/del_transf = null
+[sub_resource type="MultiMesh" id="MultiMesh_rn87u"]
+transform_format = 1
+mesh = SubResource("SphereMesh_tp1y2")
 
 [node name="Node3D" type="StaticBody3D"]
 script = ExtResource("1_lwtch")
@@ -35,8 +28,6 @@ script = ExtResource("1_lwtch")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_a6fmu")
 
-[node name="test_shell" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0934872, -0.295901, 0.389686)
-visible = false
-mesh = SubResource("SphereMesh_tp1y2")
-surface_material_override/0 = SubResource("ShaderMaterial_4o2c4")
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_yh5bt")
+multimesh = SubResource("MultiMesh_rn87u")

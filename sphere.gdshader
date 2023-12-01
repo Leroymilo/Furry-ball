@@ -6,7 +6,7 @@ uniform float DENSITY = 512.f;						// hair density
 uniform vec3 base_color = vec3(0.83, 0.65, 0.31);	// base color
 
 // Required parameters
-uniform float H;
+uniform uint SHELL_NB;
 // shell layer
 uniform mat4 del_transf;
 // movement transform (with inverse exponential persistence)
@@ -21,7 +21,11 @@ float hash(vec2 v) {
 	return float(n & uint(0x7fffffffU)) / float(0x7fffffff);
 }
 
+varying float H;
+
 void vertex() {
+	H = float(INSTANCE_ID) / float(SHELL_NB);
+	
 	// Applying fake physics
 	vec3 tip = VERTEX + L * NORMAL;
 	vec3 displacement = (del_transf * vec4(tip, 1)).xyz - tip;
