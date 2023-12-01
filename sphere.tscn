@@ -1,11 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://c74iukkj7fow3"]
+[gd_scene load_steps=6 format=3 uid="uid://c74iukkj7fow3"]
 
 [ext_resource type="Shader" path="res://sphere.gdshader" id="1_d3t7a"]
 [ext_resource type="Script" path="res://sphere.gd" id="1_lwtch"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_a6fmu"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yh5bt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_54shb"]
 render_priority = 0
 shader = ExtResource("1_d3t7a")
 shader_parameter/L = 0.4
@@ -14,20 +12,15 @@ shader_parameter/base_color = Vector3(0.83, 0.65, 0.31)
 shader_parameter/SHELL_NB = 1
 shader_parameter/del_transf = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_tp1y2"]
+[sub_resource type="SphereMesh" id="SphereMesh_suvae"]
 radius = 1.0
 height = 2.0
 
-[sub_resource type="MultiMesh" id="MultiMesh_rn87u"]
+[sub_resource type="MultiMesh" id="MultiMesh_4n3ml"]
 transform_format = 1
-mesh = SubResource("SphereMesh_tp1y2")
+mesh = SubResource("SphereMesh_suvae")
 
-[node name="Node3D" type="StaticBody3D"]
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D"]
+material_override = SubResource("ShaderMaterial_54shb")
+multimesh = SubResource("MultiMesh_4n3ml")
 script = ExtResource("1_lwtch")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_a6fmu")
-
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
-material_override = SubResource("ShaderMaterial_yh5bt")
-multimesh = SubResource("MultiMesh_rn87u")

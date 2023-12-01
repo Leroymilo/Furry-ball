@@ -1,9 +1,8 @@
-extends StaticBody3D
+extends MultiMeshInstance3D
 
 # Preloads
 var shader = preload("res://sphere.gdshader")
 var mesh: SphereMesh
-@onready var multimesh: MultiMesh = $MultiMeshInstance3D.multimesh
 var identity: Array[float] = [
 	1.0, 0.0, 0.0, 0.0,
 	0.0, 1.0, 0.0, 0.0,
@@ -71,7 +70,7 @@ func update_shader():
 	var final_transf = del_transf.translated_local(grav)
 	final_transf = final_transf.interpolate_with(Transform3D(), STIFF)
 
-	var material: ShaderMaterial = $MultiMeshInstance3D.get_material_override()
+	var material: ShaderMaterial = self.get_material_override()
 	material.set_shader_parameter("SHELL_NB", SHELL_NB)
 	material.set_shader_parameter("L", L)
 	material.set_shader_parameter("DENSITY", DENSITY)
