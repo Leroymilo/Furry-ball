@@ -24,8 +24,8 @@ fov = 30.0
 [node name="CameraControlButton" type="Button" parent="HUD"]
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 1, 1, 0)
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_right = 4000.0
+offset_bottom = 3000.0
 focus_mode = 1
 action_mode = 0
 button_mask = 3
